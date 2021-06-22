@@ -12,13 +12,14 @@ class CRUDListState extends BaseState {
     super(config);
     this.validator = services.spec.createValidator(this.schemaParams());
     this.api = services.api.get(this.config.apiEndpoint);
+    this.temporyIds = 0;
   }
 
   /**
    * Конфигурация по умолчанию
    * @return {Object}
    */
-  defaultConfig(){
+  defaultConfig() {
     return mc.patch(super.defaultState(), {
       apiEndpoint: 'crud' // абстрактный endpoint
     });
@@ -43,6 +44,7 @@ class CRUDListState extends BaseState {
       },
       wait: false,
       errors: null,
+      changes: false
     };
   }
 
@@ -79,7 +81,7 @@ class CRUDListState extends BaseState {
     // В основе начальные параметры
     const defaultParams = this.defaultState().params;
     // Параметры из URL (query string)
-    const queryParams = this.validateParams(services.navigation.getSearchParams());
+    const queryParams = this.validateParams(services.navigation.getSearchParams()[this.config.name]);
     // Сливаем все параметры
     const newParams = mc.merge(defaultParams, queryParams, params);
     // Установка параметров и загрузка данных по ним
@@ -138,7 +140,7 @@ class CRUDListState extends BaseState {
       }
       //  Сохранить параметры в location.search
       if (options.remember) {
-        services.navigation.setSearchParams(newParams, options.remember === 'push');
+        services.navigation.setSearchParams({[this.config.name]: newParams}, options.remember === 'push');
       }
 
       // 2. ДАННЫЕ
@@ -150,7 +152,11 @@ class CRUDListState extends BaseState {
         const response = await this.api.findMany(apiParams);
         // Установка полученных данных в состояние
         const result = response.data.result;
-        this.updateState(mc.patch(result, {wait: false, errors: null}), 'Список загружен');
+        this.updateState(mc.patch(result, {
+          wait: false,
+          errors: null,
+          changes: false
+        }), 'Список загружен');
       }
       return true;
     } catch (e) {
@@ -171,8 +177,8 @@ class CRUDListState extends BaseState {
    * @param params {Object}
    * @return {Object} Корректные параметры
    */
-  validateParams(params){
-    if (!this.validator(params)){
+  validateParams(params) {
+    if (!this.validator(params)) {
       params = this.defaultState().params;
     }
     return params;
@@ -193,16 +199,89 @@ class CRUDListState extends BaseState {
     };
   }
 
-  async createItem(item){
-
+  async addItem(item) {
+    item = mc.merge(item, {
+      _id: --this.temporyIds,
+      _new: true
+    });
+    const items = [item, ...this.currentState().items];
+    const count = this.currentState().count + 1;
+    const limit = this.currentState().params.limit + 1;
+    this.updateState({items, count, params: {limit}, changes: true}, 'Добавление запись в список');
   }
 
-  async updateItem(id, item){
-
+  async changeItem(id, patch) {
+    const items = this.currentState().items.map(item => {
+      if (item._id === id) {
+        return mc.merge(item, patch, {_changed: true});
+      }
+      return item;
+    });
+    this.updateState({items, changes: true}, 'Изменение записи ' + id);
   }
 
-  async deleteItem(id){
+  async deleteItem(id) {
+    const items = [...this.currentState().items];
+    const itemIndex = items.findIndex(item => item._id === id);
+    if (itemIndex !== -1) {
+      let count = this.currentState().count;
+      let limit = this.currentState().params.limit;
+      if (items[itemIndex]._new) {
+        items.splice(itemIndex, 1);
+        count--;
+        limit--;
+      } else {
+        items[itemIndex] = mc.merge(items[itemIndex], {
+          _deleted: !items[itemIndex]._deleted,
+          _changed: true
+        });
+      }
+      this.updateState({items, count, params: {limit}, changes: true}, 'Удаление записи ' + id);
+    }
+  }
 
+  async saveAllItem() {
+    const currentItems = this.currentState().items;
+    const items = [];
+    let count = this.currentState().count;
+    let limit = this.currentState().params.limit;
+    let changes = false;
+    for (const item of currentItems) {
+      try {
+        if (item._new) {
+          // создание
+          const response = await this.api.create({
+            data: mc.merge(item, {$unset: ['_id', '_new', '_changed', '_error']}),
+          });
+          items.push(response.data.result);
+        } else if (item._changed) {
+          if (item._deleted) {
+            // Удаление
+            await this.api.delete({id: item._id});
+            count--;
+            limit--;
+          } else {
+            // Сохранение
+            const response = await this.api.update({
+              id: item._id,
+              data: mc.merge(item, {$unset: ['_new', '_changed', '_error']}),
+            });
+            items.push(response.data.result);
+          }
+        } else {
+          // Нет изменений
+          items.push(item);
+        }
+      } catch (e) {
+        if (e.response && e.response.data && e.response.data.error) {
+          items.push(mc.merge(item, {_error: e.response.data.error.data.issues}));
+        } else {
+          throw e;
+        }
+        changes = true;
+      }
+    }
+    this.updateState({items, count, params: {limit}, changes}, 'Сохранены изменения');
   }
 }
 

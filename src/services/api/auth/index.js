@@ -1,12 +1,12 @@
 import params from '@src/utils/query-params';
-import CRUDEndpoint from '@src/services/api/crud';
 import mc from "merge-change";
+import BaseEndpoint from "@src/services/api/base";
 
-class UsersEndpoint extends CRUDEndpoint{
+class AuthEndpoint extends BaseEndpoint{
 
   defaultConfig() {
     return mc.patch(super.defaultConfig(), {
-      url: '/api/v1/users',
+      url: '/api/v1/auth',
     });
   }
 
@@ -68,4 +68,4 @@ class UsersEndpoint extends CRUDEndpoint{
   }
 }
 
-export default UsersEndpoint;
+export default AuthEndpoint;

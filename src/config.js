@@ -6,27 +6,38 @@ let config = {
   api: {
     default: {
       // Обычно хост на апи относительный и используется прокси для устранения CORS
-      baseURL: isWeb ? '' : 'http://example.front.ylab.io',
+      baseURL: isWeb ? '' : 'http://localhost:8140',
       //headers: {},
       //auth:{} base auth
     },
     // Прокси на апи, если режим разработки или ssr без nginx
     proxy: {
       '/api/**': {
-        target: 'http://example.front.ylab.io',
+        target: 'http://localhost:8140', //'http://example.front.ylab.io',
         secure: false,
         changeOrigin: true,
       },
+      '/auth/**': {
+        target: 'https://keycloak.dev.longevityplan.com', //'http://example.front.ylab.io',
+        secure: false,
+        changeOrigin: true,
+      }
     },
     // Настройки для конкретных модулей api по их названиям
     endpoints:{
-      users: {
+      auth: {
 
       },
       ssr: {
         baseURL: ''
       }
     }
+  },
+
+  keycloak: {
+    url: "http://localhost:8031/auth",
+    realm: "LongevityTest",
+    clientId: "logevity-test-client"
   },
 
   // Сервис состояний и действий (redux)
@@ -51,7 +62,7 @@ let config = {
 
   // Сервис навигации
   navigation: {
-    basename: '/', // если фронт доступен по вложенному пути
+    basename: '/admin/', // /admin/ // если фронт доступен по вложенному пути
     type: isWeb ? 'browser' : 'memory',
   },
 

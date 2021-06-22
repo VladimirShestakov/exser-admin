@@ -5,3 +5,22 @@ html, body, #app {
   margin: 0;
   font: 16px/20px normal Arial, sans-serif;
 }
+
+.colError{
+  //background: #d555;
+}
+
+.new-row, .ant-table .ant-table-tbody > tr.new-row:hover > td{
+  background: rgba(199, 255, 134, 0.33);
+}
+
+.changed-row, .ant-table .ant-table-tbody > tr.changed-row:hover > td{
+  background: rgba(134, 231, 255, 0.33);
+}
+
+.deleted-row, .ant-table .ant-table-tbody > tr.deleted-row:hover > td{
+  background: rgba(255, 148, 134, 0.33);
+}
+.deleted-row * {
+  text-decoration: line-through;
+}

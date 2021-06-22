@@ -1,13 +1,29 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import themes from '@src/utils/themes';
 import LayoutField from '@src/components/layouts/layout-field';
 import Input from '@src/components/elements/input';
 import Error from '@src/components/elements/error';
-import Button from '@src/components/elements/button';
+// import Button from '@src/components/elements/button';
 
 import './style.less';
+import {Form, Button, Checkbox} from 'antd';
+
+const layout = {
+  labelCol: {
+    span: 4,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 4,
+    span: 16,
+  },
+};
 
 class FormLogin extends Component {
   static propTypes = {
@@ -23,28 +39,26 @@ class FormLogin extends Component {
   };
 
   static defaultProps = {
+    data: {},
     theme: ['default'],
     errors: {},
-    onChange: () => {},
-    onSubmit: () => {},
+    onChange: () => {    },
+    onSubmit: () => {    },
   };
 
   onChange = name => value => {
-    const { data, onChange } = this.props;
-
-    onChange({ ...data, [name]: value });
+    const {data, onChange} = this.props;
+    onChange({...data, [name]: value});
   };
 
   onSubmit = e => {
-    const { data, onSubmit } = this.props;
-
+    const {data, onSubmit} = this.props;
     e.preventDefault();
-    onSubmit({ ...data });
+    onSubmit(data);
   };
 
-  render() {
-    const { data, errors, wait, theme } = this.props;
-
+  render(){
+    const {data, errors, wait, theme} = this.props;
     return (
       <form className={themes('FormLogin', theme)} onSubmit={this.onSubmit}>
         <LayoutField
@@ -61,7 +75,7 @@ class FormLogin extends Component {
         />
         <LayoutField
           input={
-            <Button type="submit" disabled={wait}>
+            <Button type="primary" htmlType="submit" loading={wait} disabled={wait}>
               Войти{wait && '...'}
             </Button>
           }
@@ -71,5 +85,9 @@ class FormLogin extends Component {
     );
   }
 }
+
+/**
+ *
+ */
 
 export default FormLogin;

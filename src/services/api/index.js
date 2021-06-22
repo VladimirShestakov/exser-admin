@@ -35,7 +35,7 @@ class ApiService {
     config = mc.merge(this.config.endpoints[config.name], config);
     // Если нет класса сопоставленного с name, то используется класс по умолчанию
     if (!config.proto) config.proto = config.name;
-    if (!endpoints[config.proto]) throw new Error(`Not found base endpoint "${config.name}"`);
+    if (!endpoints[config.proto]) throw new Error(`Not found base endpoint "${config.proto}"`);
     const Constructor = endpoints[config.proto];
     this.endpoints[config.name] = new Constructor(config);
     return this.endpoints[config.name];

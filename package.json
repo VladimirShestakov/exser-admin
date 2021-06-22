@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "http-proxy": "^1.18.1",
     "js-base64": "^3.6.1",
+    "keycloak-js": "^13.0.1",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "merge-change": "^1.6.11",

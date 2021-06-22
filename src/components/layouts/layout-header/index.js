@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import LayoutContent from '../layout-content';
@@ -20,17 +20,15 @@ class LayoutHeader extends Component {
   };
 
   render() {
-    const { left, children, right, center, theme } = this.props;
+    const {left, children, right, center, theme} = this.props;
 
     return (
       <div className={themes('LayoutHeader', theme)}>
-        <LayoutContent>
-          <div className="LayoutHeader__wrap">
-            <div className="LayoutHeader__left">{left}</div>
-            <div className="LayoutHeader__center">{children || center}</div>
-            <div className="LayoutHeader__right">{right}</div>
-          </div>
-        </LayoutContent>
+        <div className="LayoutHeader__wrap">
+          <div className="LayoutHeader__left">{left}</div>
+          <div className="LayoutHeader__center">{children || center}</div>
+          <div className="LayoutHeader__right">{right}</div>
+        </div>
       </div>
     );
   }

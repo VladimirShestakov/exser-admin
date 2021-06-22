@@ -9,6 +9,7 @@ import services from '@src/services';
  * @param options {{backForward, ssrForce, ssr}}
  */
 export default function useInit(callback, inputs = [], options = {onBackForward: false, ssr: null, ssrForce: false}) {
+
   // Рендер на сервере.
   // На сервере вызов callback если передан ключ ssr и с этим ключом ещё не вызывался
   if (services.env.IS_NODE) {

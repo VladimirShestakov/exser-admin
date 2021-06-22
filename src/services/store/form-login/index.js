@@ -30,7 +30,7 @@ class FormLoginState extends BaseState {
   async submit(data) {
     this.updateState({wait: true, errors: null}, 'Отправка формы');
     try {
-      const response = await services.api.get('users').login(data);
+      const response = await services.api.get('auth').login(data);
       const result = response.data.result;
       // Установка и сохранение сессии
       await services.store.session.save({user: result.user, token: result.token});

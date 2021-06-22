@@ -1,3 +1,4 @@
+import 'antd/dist/antd.css';
 import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -25,14 +26,14 @@ function App() {
   return (
     <Fragment>
       <Helmet>
-        <title>Example</title>
+        <title>Admin</title>
       </Helmet>
       <Switch>
-        <Route path="/" exact={true} component={Main} />
-        <Route path="/catalog/:categoryId?" component={Catalog} />
-        <Route path="/about" component={About} />
+        {/*<Route path="/" exact={true} component={Main} />*/}
+        {/*<Route path="/catalog/:categoryId?" component={Catalog} />*/}
+        {/*<Route path="/about" component={About} />*/}
         <Route path="/login" component={Login} />
-        <RoutePrivate path="/private" failpath="/login" component={Private} />
+        <RoutePrivate path="/" failpath="/login" component={Private} />
         <Route component={NotFound} />
       </Switch>
       <Modals />

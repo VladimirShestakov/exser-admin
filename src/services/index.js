@@ -109,6 +109,14 @@ class Services {
   get spec() {
     return this.get('spec');
   }
+
+  /**
+   * Сервис Keycloak
+   * @returns {KeycloakService}
+   */
+  get keycloak() {
+    return this.get('keycloak');
+  }
 }
 
 export default new Services();

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import themes from '@src/utils/themes';
 
 import './style.less';
@@ -17,7 +16,6 @@ class LayoutContent extends Component {
 
   render() {
     const { children, theme } = this.props;
-
     return <div className={themes('LayoutContent', theme)}>{children}</div>;
   }
 }

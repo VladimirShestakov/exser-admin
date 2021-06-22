@@ -46,7 +46,7 @@ class ActionsService {
     if (config.disabled !== true) {
       // Если нет класса сопоставленного с name, то используется класс по умолчанию
       if (!config.proto) config.proto = config.name;
-      if (!modules[config.proto]) throw new Error(`Not found base state "${config.name}"`);
+      if (!modules[config.proto]) throw new Error(`Not found base state "${config.proto}"`);
       const constructor = modules[config.proto];
       this._states[config.name] = new constructor(config);
       const initState = this._states[config.name].defaultState();

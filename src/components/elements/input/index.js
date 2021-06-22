@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+
+import './style.less';
+import {Input} from 'antd';
+
 import themes from '@src/utils/themes';
 
 import './style.less';
 
-class Input extends Component {
+class InputComponent extends Component {
   static propTypes = {
     value: PropTypes.node.isRequired,
     type: PropTypes.string,
@@ -54,7 +58,7 @@ class Input extends Component {
 
     return (
       <div className={themes('Input', this.props.theme)}>
-        <input
+        <Input
           className="Input__input"
           value={value}
           type={type}
@@ -73,4 +77,4 @@ class Input extends Component {
   }
 }
 
-export default Input;
+export default InputComponent;

@@ -1,6 +1,5 @@
 import React, { Fragment, useCallback } from 'react';
 import LayoutPage from '@src/components/layouts/layout-page';
-import HeaderContainer from '@src/containers/header-container';
 import LayoutContent from '@src/components/layouts/layout-content';
 import FormLogin from '@src/components/forms/form-login';
 import useSelectorMap from '@src/utils/hooks/use-selector-map';
@@ -23,10 +22,10 @@ function Login() {
   };
 
   return (
-    <LayoutPage header={<HeaderContainer />}>
-      <LayoutContent>
+    <LayoutPage footer={"Longevity 2021 Created by YLab"}>
+      <LayoutContent theme="short">
         <Fragment>
-          <h1>Login page</h1>
+          <h1>Вход</h1>
           <FormLogin
             data={select.formLogin.data}
             errors={select.formLogin.errors}

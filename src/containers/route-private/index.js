@@ -4,6 +4,8 @@ import { Redirect, Route } from 'react-router-dom';
 import useSelectorMap from '@src/utils/hooks/use-selector-map';
 import useInit from '@src/utils/hooks/use-init';
 import services from "@src/services";
+import LayoutPage from '@src/components/layouts/layout-page';
+import LayoutContent from '@src/components/layouts/layout-content';
 
 function RoutePrivate(props) {
   // Компонент для рендера и параметры роута
@@ -15,32 +17,29 @@ function RoutePrivate(props) {
   }));
 
   useInit(async () => {
-    // Вызывается даже если есть сессиия в целях её акутализации
-    // Вызов происходит при переходе в роут с друго пути
+    // Вызывается один раз (даже если есть сессия в целях её актуализации)
     await services.store.session.remind();
+    //await services.store.session.remindKeycloak();
   });
 
   // Что рендерить роуту в зависимости от состояния сессии
-  routeProps.render = useCallback(
-    props => {
-      if (select.session.wait) {
-        // Ожидание инициализации сессии
-        return (
-          <div>
-            <i>Проверка сессии...</i>
-          </div>
-        );
-      } else if (select.session.exists) {
-        // Есть доступ
-        return <Component {...props} />;
-      } else {
-        // Нет доступа - редирект
-        // @todo Не работает при SSR
+  routeProps.render = useCallback(props => {
+    if (select.session.exists) {
+      // Есть доступ
+      return <Component {...props} />;
+    } else {
+      if (!select.session.wait) {
         return <Redirect to={{ pathname: routeProps.failPath, state: { from: props.location } }} />;
       }
-    },
-    [select, Component],
-  );
+      return (
+        <LayoutPage footer={"Longevity 2021 Created by YLab"}>
+          <LayoutContent theme="short">
+              Checking session...
+          </LayoutContent>
+        </LayoutPage>
+      );
+    }
+  }, [select, Component]);
 
   return <Route {...routeProps} />;
 }

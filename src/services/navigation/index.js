@@ -105,7 +105,7 @@ class NavigationService {
    */
   setSearchParams(params, push = true, clear = false, path) {
     const currentParams = this.getSearchParams();
-    const newParams = clear ? params : mc.update(currentParams, params);
+    let newParams = clear ? params : mc.update(currentParams, params);
     let newSearch = qs.stringify(newParams, {
       addQueryPrefix: true,
       arrayFormat: 'comma',
@@ -137,7 +137,19 @@ class NavigationService {
    * @param push Способ обновления истории роутера. Если false, то используется history.replace()
    */
   goPrivate(push = true) {
-    push ? this._history.push('/private') : this._history.replace('/private');
+    push ? this._history.push('/') : this._history.replace('/');
+  }
+
+  open(namespace, name, params){
+
+  }
+
+  close(namespace){
+
+  }
+
+  closeAll(namespace){
+
   }
 }
 

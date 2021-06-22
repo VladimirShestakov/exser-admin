@@ -30,6 +30,7 @@ let render = ReactDOM.render;
     });
     render = ReactDOM.hydrate;
   }
+
   render(
     <Provider store={services.store.redux}>
       <Router history={services.navigation.history}>
@@ -38,4 +39,5 @@ let render = ReactDOM.render;
     </Provider>,
     document.getElementById('app'),
   );
+
 })();

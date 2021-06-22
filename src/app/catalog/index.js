@@ -3,7 +3,7 @@ import services from '@src/services';
 import LayoutContent from '@src/components/layouts/layout-content';
 import HeaderContainer from '@src/containers/header-container';
 import LayoutPage from '@src/components/layouts/layout-page';
-import ArticleList from '@src/containers/article-list';
+import ArticleList from '@src/containers/universal-list';
 import CategoryTree from '@src/containers/category-tree';
 import useInit from '@src/utils/hooks/use-init';
 
