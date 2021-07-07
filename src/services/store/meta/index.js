@@ -13,6 +13,7 @@ class MetaState extends BaseState {
   }
 
   async load() {
+    console.log('load meta');
     //@todo Загрузка аннотации
   }
 

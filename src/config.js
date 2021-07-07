@@ -62,7 +62,7 @@ let config = {
 
   // Сервис навигации
   navigation: {
-    basename: '/admin/', //'' // если фронт доступен по вложенному пути
+    basename: '', //'' // если фронт доступен по вложенному пути
     type: isWeb ? 'browser' : 'memory',
   },
 

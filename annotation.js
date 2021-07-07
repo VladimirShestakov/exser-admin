@@ -1,5 +1,21 @@
 export default {
   data: {
+    $show: ['side=menu', 'page=ages'],
+    views: {
+      'page=ages': {
+
+      },
+      'page=ages/:id': {
+
+      },
+      'modal=age/:id': {
+
+      }
+    },
+
+
+
+
     ages: {
       where: 'page', // page, modal, panel, inline, ...
       control: 'universal-list',// universal-form, select-dropdown, ...

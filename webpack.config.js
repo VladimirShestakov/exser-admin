@@ -26,13 +26,15 @@ let config = {
   target: target,
   mode: process.env.NODE_ENV, // https://webpack.js.org/configuration/mode/
   context: path.join(__dirname, '/src'),
-  entry: [`index.${target}.js`],
+  entry: `index.${target}.js`,
   output: {
     path: path.join(__dirname, 'dist', target),
     filename: '[name].js', //'[name]-bundle-[chunkhash:8].js'
     // publicPath: `/dist/${target}/`,
     // pathinfo: true
     libraryTarget: isNode ? 'commonjs2' : undefined,
+    library: 'ExserAdmin',
+    clean: true,
   },
   plugins: [
     new ProgressBarPlugin(),
@@ -145,10 +147,10 @@ if (isDevelopment && isWeb) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.devServer = {
     //compress: false,
-    contentBase: path.join(__dirname, 'dist', target),
+    static: path.join(__dirname, 'dist', target),
     port: appConfig.devServer.port,
-    publicPath: config.output.publicPath,
-    hot: true,
+    //publicPath: config.output.publicPath,
+    //hot: true,
     historyApiFallback: true,
     proxy: appConfig.api.proxy,
   };
